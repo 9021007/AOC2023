@@ -1,8 +1,8 @@
 from tqdm import tqdm
 
 
-# input = open("input.txt", "r").read().split("\n")
-input = open("exampleinput.txt", "r").read().split("\n")
+input = open("input.txt", "r").read().split("\n")
+# input = open("exampleinput.txt", "r").read().split("\n")
 
 preexpand = []
 
@@ -13,16 +13,15 @@ for line in input:
 
 expanded1 = []
 
-expansionamount = 10
+expansionamount = 1000000
 
 for i in tqdm(range(len(preexpand))):
     # for each row in unexpanded1
     if list(set(preexpand[i])) == ["."]:
         # if the row is only stars
-        for j in tqdm(range((expansionamount))):
-            expanded1.append([])
-            for k in range(len(preexpand[i])):
-                expanded1[len(expanded1)-1].append(".")
+        expanded1.append([])
+        for k in range(len(preexpand[i])):
+            expanded1[len(expanded1)-1].append("E")
     else:
         expanded1.append([])
         for j in range(len(preexpand[i])):
@@ -41,7 +40,7 @@ for i in range(len(expanded1[0])):
 for i in range(len(expanded1)):
     for j in range(len(expanded1[i])):
         if j in dotsonly:
-            if expanded1[i][j] != ".":
+            if expanded1[i][j] != "." and expanded1[i][j] != "E":
                 dotsonly.remove(j)
                 # print("removed ", j, " at line ", i)
 
@@ -53,11 +52,8 @@ for j in range(len(expanded1)):
     
     for k in range(len(expanded1[j])):
         if k in dotsonly:
-            for l in range(expansionamount):
-                expanded2[j].append(".")
-                # expanded2[j].append(".")
-                # expanded2[j].append(".")
-            # print(expanded2)
+            expanded2[j].append("E")
+            # print("E2E2E2E2E2E2")
         else:
             # print(j,k, len(expanded1[j]), len(expanded1[j][k]))
             expanded2[j].append(expanded1[j][k])
@@ -69,8 +65,8 @@ sum = 0
 accountedfor = []
         
 
-for line in expanded2:
-    print(str(line).replace(" ", "").replace(",", "").replace("'", "").replace("]", "").replace("[", ""))
+# for line in expanded2:
+#     print(str(line).replace(" ", "").replace(",", "").replace("'", "").replace("]", "").replace("[", ""))
 
 for i in range(len(expanded2)):
     for j in range(len(expanded2[i])):
@@ -83,7 +79,51 @@ for i in range(len(expanded2)):
 
 for g in galaxies:
     for other in galaxies:
-        g[2].append([other[0], other[1], abs(g[0]-other[0])+abs(g[1]-other[1])])
+        contents = []
+        # find taxicab distance, and return the content of every point along the way
+
+        # Xcontents = expanded2[g[0]][g[1]:other[1]]
+        # Ycontents = []
+        # for i in range(g[0], other[0]):
+        #     Ycontents.append(expanded2[i][other[1]])
+        # print(Xcontents, Ycontents)
+        Xcontents = []
+        if g[1] < other[1]:
+            # g is left of other
+            Xcontents = expanded2[g[0]][g[1]:other[1]]
+            # print(Xcontents, "L")
+        elif g[1] == other[1]:
+            Xcontents = []
+            # print(Xcontents, "S")
+        else:
+            # g is right of other
+            Xcontents = expanded2[g[0]][other[1]:g[1]]
+            # print(Xcontents, "R")
+
+
+        Ycontents = []
+        if g[0] < other[0]:
+            # g is above other
+            for i in range(g[0], other[0]):
+                Ycontents.append(expanded2[i][other[1]])
+            # print(Ycontents, "U")
+        elif g[0] == other[0]:
+            Ycontents = []
+            # print(Ycontents, "S")
+        else:
+            # g is below other
+            for i in range(other[0], g[0]):
+                Ycontents.append(expanded2[i][other[1]])
+            # print(Ycontents, "D")
+        
+        # distance is counted as the number of points between the two galaxies, but E counts as expansionamount points
+
+        Xdistance = Xcontents.count("E")*expansionamount + Xcontents.count("#") + Xcontents.count(".")
+        Ydistance = Ycontents.count("E")*expansionamount + Ycontents.count("#") + Ycontents.count(".")
+
+        taxicabdistance = Xdistance + Ydistance
+
+        galaxies[galaxies.index(g)][2].append([other[0], other[1], taxicabdistance])
 
 # for g in galaxies:
 #     print(g)
