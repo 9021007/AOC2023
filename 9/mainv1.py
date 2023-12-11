@@ -1,5 +1,5 @@
-input = open("input.txt", "r").read().split("\n")
-# input = open("exampleinput.txt", "r").read().split("\n")
+# input = open("input.txt", "r").read().split("\n")
+input = open("exampleinput.txt", "r").read().split("\n")
 
 
 
@@ -45,7 +45,7 @@ for seq in sequences:
 
     values.append(currentval)
 
-# print("values: ", values)
+print("values: ", values)
 
 sum = 0
 
