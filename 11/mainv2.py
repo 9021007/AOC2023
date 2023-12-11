@@ -15,18 +15,14 @@ expanded1 = []
 
 expansionamount = 10
 
-for i in range(len(preexpand)):
+for i in tqdm(range(len(preexpand))):
     # for each row in unexpanded1
     if list(set(preexpand[i])) == ["."]:
         # if the row is only stars
-        expanded1.append([])
-        expanded1.append([])
-        for j in range(len(preexpand[i])):
-            #for each dot star
-            for k in range(expansionamount*2):
-                # expanded1[len(expanded1)-1].append(".")
-                # expanded1[len(expanded1)-2].append(".")
-                pass
+        for j in tqdm(range((expansionamount))):
+            expanded1.append([])
+            for k in range(len(preexpand[i])):
+                expanded1[len(expanded1)-1].append(".")
     else:
         expanded1.append([])
         for j in range(len(preexpand[i])):
@@ -57,9 +53,10 @@ for j in range(len(expanded1)):
     
     for k in range(len(expanded1[j])):
         if k in dotsonly:
-            for l in range(expansionamount-1):
+            for l in range(expansionamount):
                 expanded2[j].append(".")
-                expanded2[j].append(".")
+                # expanded2[j].append(".")
+                # expanded2[j].append(".")
             # print(expanded2)
         else:
             # print(j,k, len(expanded1[j]), len(expanded1[j][k]))
@@ -72,8 +69,8 @@ sum = 0
 accountedfor = []
         
 
-# for line in expanded2:
-#     print(str(line).replace(" ", "").replace(",", "").replace("'", "").replace("]", "").replace("[", ""))
+for line in expanded2:
+    print(str(line).replace(" ", "").replace(",", "").replace("'", "").replace("]", "").replace("[", ""))
 
 for i in range(len(expanded2)):
     for j in range(len(expanded2[i])):
